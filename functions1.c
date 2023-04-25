@@ -1,96 +1,103 @@
 #include "main.h"
+#include <stdarg.h>
+#include <stdio.h>
 
-#define BUFFER_SIZE 1024
-#define FLAG_HASH 1
-
-typedef unsigned long int uint64_t;
-
-/* Print an unsigned number in decimal notation */
-int print_decimal_uint64_t(va_list args, char buffer[],
-	int flags, int width, int precision, int size)
+/**
+ * print_hexa - prints a hexadecimal number
+ * @args: list of arguments
+ * @map_to: string of characters to map to
+ * @buffer: buffer to store output in
+ * @flags: flags used to modify the output
+ * @width: minimum width of the output
+ * @precision: precision of the output
+ * @length: length modifier for the output
+ *
+ * Return: number of characters printed
+ */
+int print_hexa(va_list args, char map_to[], char buffer[],
+              __attribute__((unused))int flags,
+              __attribute__((unused))int width,
+              __attribute__((unused))int precision,
+              __attribute__((unused))int length)
 {
-	int i = BUFFER_SIZE - 2;
-	uint64_t num = va_arg(args, uint64_t);
+    unsigned int n = va_arg(args, unsigned int);
+    unsigned int i, shifter, count = 0;
+    char temp;
 
-	num = convert_size_uint64_t(num, size);
+    for (shifter = 28; shifter >= 0; shifter -= 4)
+    {
+        i = (n >> shifter) & 0xf;
+        if (count == 0 && i == 0)
+            continue;
+        temp = map_to[i];
+        buffer[count] = temp;
+        count++;
+    }
+    if (count == 0)
+    {
+        buffer[count] = '0';
+        count++;
+    }
+    buffer[count] = '\0';
 
-	if (num == 0)
-		buffer[i--] = '0';
-
-	buffer[BUFFER_SIZE - 1] = '\0';
-
-	while (num > 0)
-	{
-		buffer[i--] = (num % 10) + '0';
-		num /= 10;
-	}
-
-	i++;
-
-	return (write_uint64_t(0, i, buffer, flags, width, precision, size));
+    return (count);
 }
 
-/* Print an unsigned number in octal notation */
-int print_octal_uint64_t(va_list args, char buffer[],
-	int flags, int width, int precision, int size)
+/**
+ * print_hexadecimal - prints a hexadecimal number
+ * @args: list of arguments
+ * @flags: flags used to modify the output
+ * @width: minimum width of the output
+ * @precision: precision of the output
+ * @length: length modifier for the output
+ *
+ * Return: number of characters printed
+ */
+int print_hexadecimal(va_list args, int flags, int width,
+                      int precision, int length)
 {
-	int i = BUFFER_SIZE - 2;
-	uint64_t num = va_arg(args, uint64_t);
-	uint64_t init_num = num;
+    char buffer[100];
+    int count;
 
-	UNUSED(width);
+    (void)flags;
+    (void)width;
+    (void)precision;
+    (void)length;
 
-	num = convert_size_uint64_t(num, size);
+    count = print_hexa(args, "0123456789abcdef", buffer, flags, width,
+                       precision, length);
 
-	if (num == 0)
-		buffer[i--] = '0';
+    printf("%s", buffer);
 
-	buffer[BUFFER_SIZE - 1] = '\0';
-
-	while (num > 0)
-	{
-		buffer[i--] = (num % 8) + '0';
-		num /= 8;
-	}
-
-	if (flags & FLAG_HASH && init_num != 0)
-		buffer[i--] = '0';
-
-	i++;
-
-	return (write_uint64_t(0, i, buffer, flags, width, precision, size));
+    return (count);
 }
 
-/* Print an unsigned number in hexadecimal notation */
-int print_hexadecimal_uint64_t(va_list args, char buffer[],
-	int flags, int width, int precision, int size)
+/**
+ * print_hexadecimal_upper - prints an uppercase hexadecimal number
+ * @args: list of arguments
+ * @flags: flags used to modify the output
+ * @width: minimum width of the output
+ * @precision: precision of the output
+ * @length: length modifier for the output
+ *
+ * Return: number of characters printed
+ */
+int print_hexadecimal_upper(va_list args, int flags, int width,
+                            int precision, int length)
 {
-	return (print_hexadecimal_uint64_t_map(args, "0123456789abcdef",
-		buffer, flags, 'x', width, precision, size));
+    char buffer[100];
+    int count;
+
+    (void)flags;
+    (void)width;
+    (void)precision;
+    (void)length;
+
+    count = print_hexa(args, "0123456789ABCDEF", buffer, flags, width,
+                       precision, length);
+
+    printf("%s", buffer);
+
+    return (count);
 }
-
-/* Print an unsigned number in uppercase hexadecimal notation */
-int print_hexadecimal_uppercase_uint64_t(va_list args, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	return (print_hexadecimal_uint64_t_map(args, "0123456789ABCDEF",
-		buffer, flags, 'X', width, precision, size));
-}
-
-/* Print an unsigned number in hexadecimal notation using a given map */
-int print_hexadecimal_uint64_t_map(va_list args, char map[],
-	char buffer[], int flags, char flag_ch, int width, int precision, int size)
-{
-	int i = BUFFER_SIZE - 2;
-	uint64_t num = va_arg(args, uint64_t);
-	uint64_t init_num = num;
-
-	UNUSED(width);
-
-	num = convert_size_uint64_t(num, size);
-
-	if (num == 0)
-		buffer[i--] = '0';
-
-	buffer[BUFFER_SIZE - 1] = '\
 
