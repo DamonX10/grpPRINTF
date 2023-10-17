@@ -1,9 +1,9 @@
 #include "main.h"
 void print_buffer(char buffer[], int *buff_ind);
 /**
- * _printf - Printf function
- * @format: format.
- * Return: Printed chars.
+ * _printf - Shows all Printf function
+ * @format: format type or format
+ * Return: Presents Printed chars
  */
 int _printf(const char *format, ...)
 {
@@ -30,8 +30,8 @@ int _printf(const char *format, ...)
 		else
 		{
 			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &i);
 			width = get_width(format, &i, list);
+			flags = get_flags(format, &i);
 			precision = get_precision(format, &i, list);
 			size = get_size(format, &i);
 			++i;
@@ -50,9 +50,9 @@ int _printf(const char *format, ...)
 	return (printed_chars);
 }
 /**
- * print_buffer - Prints the contents of the buffer if it exist
- * @buffer: Array of chars
- * @buff_ind: Index at which to add next char, represents the length.
+ * print_buffer - ShowsThe contents of buffer if it does exist
+ * @buffer: Array of chars or present chars
+ * @buff_ind: Index atWhich toAdd nextChar, representsThe length.
  */
 void print_buffer(char buffer[], int *buff_ind)
 {
