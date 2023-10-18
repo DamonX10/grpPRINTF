@@ -2,8 +2,8 @@
 /**
  * get_flags - CalculatesActive flags and shows them
  * @format: FormattedString in which print theArguments
- * @i: take a parameter...yes
- * Return: Flags...
+ * @i: take a parameter
+ * Return: flags
  */
 int to_flags(const char *format, int *i)
 {

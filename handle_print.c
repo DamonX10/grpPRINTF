@@ -3,7 +3,7 @@
  * handle_print - Prints/Shows argument depending on its type
  * @fmt: FormattedString which toShow the arguments.
  * @list: List of arguments to be printed.
- * @ind: ind....
+ * @ind: ind
  * @buffer: BufferArray toHandle print.
  * @flags: Calculates activeFlags
  * @width: provide width
